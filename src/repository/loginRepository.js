@@ -2,11 +2,11 @@ import con from "./connection.js";
 
 export async function salvarLogin(login) {
     let comando = `
-    insert into tb_filme (nm_filme, ds_genero, vl_avaliacao, dt_lancamento, bt_ativo, img_filme)
-    values (?, ?, ?, ?, ?, ?);
+    insert into tb_login (nomeUsuario, senha)
+    values (?, ?);
     `
 
-    let resp = await con.query(comando, [login.nome, login.genero, login.avaliacao, login.data_lancamento, login.ativo, login.img])
+    let resp = await con.query(comando, [login.nome, login.senha])
     let info = resp[0];
 
 
@@ -23,4 +23,18 @@ export async function listarLogins() {
     let linhas = resp[0];
 
     return linhas;
+}
+
+export async function buscarUsuario() {
+    let comando = `
+        select * from tb_login where nomeUsuario = ? & senha = ?
+    `
+
+    let resp = await con.query(comando, [login.nome, login.senha]);
+    let linha = resp[0];
+
+    if (linha != null)
+        return true;
+    else
+        return false;
 }
