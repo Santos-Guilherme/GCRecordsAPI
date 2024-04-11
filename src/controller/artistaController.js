@@ -35,7 +35,7 @@ servidor.get("/artista", async(req, resp) => {
     resp.send(listaArtistas);
 })
 
-servidor.get('/artistaPorNome', async (req, resp) => {
+servidor.get('/artista/nome', async (req, resp) => {
     let artista = req.body;
     let nome = '%'+artista.nome+"%";
   
@@ -44,7 +44,7 @@ servidor.get('/artistaPorNome', async (req, resp) => {
 })
 
 
-servidor.get('/artistaPorId', async (req, resp) => {
+servidor.get('/artista/id', async (req, resp) => {
     let artista = req.body;
   
     let lista = await buscarArtistaPorId(artista.id);

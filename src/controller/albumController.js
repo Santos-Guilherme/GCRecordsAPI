@@ -31,7 +31,7 @@ servidor.get("/album", async(req, resp) => {
     resp.send(listaAlbums);
 })
 
-servidor.get('/albumPorArtista', async (req, resp) => {
+servidor.get('/album/artista', async (req, resp) => {
     let album = req.body;
   
     let lista = await buscarAlbumPorArtista(album.idArtista);
@@ -39,7 +39,7 @@ servidor.get('/albumPorArtista', async (req, resp) => {
 })
 
 
-servidor.get('/albumPorId', async (req, resp) => {
+servidor.get('/album/id', async (req, resp) => {
     let album = req.body;
   
     let lista = await buscarAlbumPorId(album.id);
