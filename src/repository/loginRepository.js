@@ -25,16 +25,13 @@ export async function listarLogins() {
     return linhas;
 }
 
-export async function buscarUsuario() {
+export async function buscarUsuario(login) {
     let comando = `
-        select * from tb_login where nomeUsuario = ? & senha = ?
+        select * from tb_login where nomeUsuario = ? and senha = ?
     `
 
     let resp = await con.query(comando, [login.nome, login.senha]);
     let linha = resp[0];
 
-    if (linha != null)
-        return true;
-    else
-        return false;
+    return linha;
 }
