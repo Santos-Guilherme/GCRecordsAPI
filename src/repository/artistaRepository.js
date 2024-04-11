@@ -69,5 +69,5 @@ export async function removerArtista(id) {
     let info = resp[0];
   
     return info.affectedRows;
-  }
+}
   

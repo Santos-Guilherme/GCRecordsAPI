@@ -5,7 +5,7 @@ import { Router } from "express";
 
 let servidor = Router();
 
-const upload = multer({ dest: 'storage/aluno' })
+const upload = multer({ dest: 'storage/artista' })
 
 
 servidor.post('/artista', async (req, resp) => {
