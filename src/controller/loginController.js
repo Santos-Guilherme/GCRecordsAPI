@@ -15,7 +15,7 @@ servidor.get('/login', async (req, resp) => {
     resp.send(lista);
 })
 
-servidor.get('/entrar', async (req, resp) => {
+servidor.get('/login/entrar', async (req, resp) => {
     let login = req.body;
     let loginBuscado = await buscarUsuario(login);
     resp.send(loginBuscado);
