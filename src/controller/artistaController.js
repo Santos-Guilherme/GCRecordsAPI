@@ -44,11 +44,16 @@ servidor.get('/artistaPorNome', async (req, resp) => {
 })
 
 
-servidor.get('/artistaPorId', async (req, resp) => {
-    let artista = req.body;
+servidor.get('/artista/:id', async (req, resp) => {
+    let id = req.params.id;
   
-    let lista = await buscarArtistaPorId(artista.id);
-    resp.send(lista);
+    let artista = await buscarArtistaPorId(id);
+    
+    if (artista) {
+        resp.send(artista);
+    } else {
+        resp.status(404).send("Artista não encontrado");
+    }
 })
 
 servidor.delete('/artista/:id', async (req, resp) => {

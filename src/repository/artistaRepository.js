@@ -6,7 +6,7 @@ export async function salvarArtista(artista) {
                     values (?, ?, ?, ?, ?, ?, ?, "", "")
     `
   
-    let resp = await con.query(comando, [artista.nome, artista.bibliografia, artista.instagram, artista.tiktok, artista.twitter, artista.youtube, artista.spotify])
+    let resp = await con.query(comando, [artista.nome, artista.descBibliografia, artista.linkInstagram, artista.linkTiktok, artista.linkTwitter, artista.linkYoutube, artista.linkSpotify])
     let info = resp[0];
   
     artista.id = info.insertId;
@@ -55,9 +55,12 @@ export async function buscarArtistaPorId(id) {
     `
   
     let resp = await con.query(comando, [id]);
-    let linhas = resp[0];
-  
-    return linhas;
+    let linhas = resp;
+    if (linhas.length > 0) {
+        return linhas[0];
+    } else {
+        return null;
+    }
 }
 
 export async function removerArtista(id) {
