@@ -1,7 +1,7 @@
 import multer from "multer";
 
 import { Router } from "express";
-import { buscarAlbumPorArtista, buscarAlbumPorId, inserirImagens, listarAlbums, removerAlbum, salvarAlbum } from "../repository/albumRepository.js";
+import { buscarAlbumPorArtista, buscarAlbumPorId, buscarUltimosAlbuns, buscarUltimosDoisAlbunsPorArtista, inserirImagens, listarAlbums, removerAlbum, salvarAlbum } from "../repository/albumRepository.js";
 
 let servidor = Router();
 
@@ -31,18 +31,30 @@ servidor.get("/album", async(req, resp) => {
     resp.send(listaAlbums);
 })
 
-servidor.get('/album/artista', async (req, resp) => {
-    let album = req.body;
+servidor.get('/album/artista/:id', async (req, resp) => {
+    let idArtista = req.params.id;
   
-    let lista = await buscarAlbumPorArtista(album.idArtista);
+    let lista = await buscarAlbumPorArtista(idArtista);
+    resp.send(lista);
+})
+
+servidor.get('/album/lancamentos/:id', async (req, resp) => {
+    let idArtista = req.params.id;
+  
+    let lista = await buscarUltimosDoisAlbunsPorArtista(idArtista);
+    resp.send(lista);
+})
+
+servidor.get('/album/lancamentos', async (req, resp) => {  
+    let lista = await buscarUltimosAlbuns();
     resp.send(lista);
 })
 
 
-servidor.get('/album/id', async (req, resp) => {
-    let album = req.body;
+servidor.get('/album/:id', async (req, resp) => {
+    let album = req.params.id;
   
-    let lista = await buscarAlbumPorId(album.id);
+    let lista = await buscarAlbumPorId(album);
     resp.send(lista);
 })
 

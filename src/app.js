@@ -15,6 +15,8 @@ servidor.use(loginController);
 servidor.use(artistaController);
 servidor.use(albumController);
 servidor.use(showController);
+servidor.use('/storage/artista', express.static('storage/artista'));
+servidor.use('/storage/album', express.static('storage/album'));
 
 let port = process.env.PORT;
 servidor.listen(port, () => console.log("API SUBIU!")); 

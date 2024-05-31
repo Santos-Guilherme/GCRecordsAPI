@@ -3,7 +3,7 @@ import con from "./connection.js";
 export async function salvarArtista(artista) {
     let comando = `
       insert into tb_artista (nome, descBibliografia, linkInstagram, linkTiktok, linkTwitter, linkYoutube, linkSpotify, imgCapa, imgSelfie) 
-                    values (?, ?, ?, ?, ?, ?, ?, "", "")
+                    values (?, ?, ?, ?, ?, ?, ?, null, null)
     `
   
     let resp = await con.query(comando, [artista.nome, artista.descBibliografia, artista.linkInstagram, artista.linkTiktok, artista.linkTwitter, artista.linkYoutube, artista.linkSpotify])

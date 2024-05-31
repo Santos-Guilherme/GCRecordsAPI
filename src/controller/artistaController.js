@@ -44,8 +44,8 @@ servidor.get('/artista/nome', async (req, resp) => {
 })
 
 
-servidor.get('/artistaPorId', async (req, resp) => {
-    let id = req.body;
+servidor.get('/artista/:id', async (req, resp) => {
+    let id = req.params.id;
   
     let artista = await buscarArtistaPorId(id);
     
