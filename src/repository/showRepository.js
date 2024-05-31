@@ -39,15 +39,18 @@ export async function buscarShowParaAcontecer() {
 
 export async function buscarShowsPrincipais() {
     let comando = `
-        select * from tb_show
-        where blFestival = true
-    `
+        SELECT s.*, a.nome AS nomeArtista, a.imgSelfie AS imagemArtista
+        FROM tb_show s
+        JOIN tb_artista a ON s.fk_idArtista = a.id
+        WHERE s.blFestival = true
+    `;
   
     let resp = await con.query(comando, []);
     let linhas = resp[0];
   
     return linhas;
 }
+
 
 export async function buscarShowsPorArtista(id) {
     let comando = `
