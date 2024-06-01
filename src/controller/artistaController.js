@@ -43,7 +43,6 @@ servidor.get('/artista/nome', async (req, resp) => {
     resp.send(lista);
 })
 
-
 servidor.get('/artista/:id', async (req, resp) => {
     let id = req.params.id;
   
@@ -65,5 +64,16 @@ servidor.delete('/artista/:id', async (req, resp) => {
     else
       resp.status(202).send();
 })
+
+servidor.put('/artista/:id', async (req, resp) => {
+    let id = req.params.id;
+    let artista = req.body;
+  
+    let resultado = await atualizarArtista(id, artista);
+    if (resultado.affectedRows == 0)
+        resp.status(404).send();
+    else
+        resp.status(202).send();
+});
 
 export default servidor;

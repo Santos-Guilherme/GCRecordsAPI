@@ -5,10 +5,10 @@ export async function salvarArtista(artista) {
       insert into tb_artista (nome, descBibliografia, linkInstagram, linkTiktok, linkTwitter, linkYoutube, linkSpotify, imgCapa, imgSelfie) 
                     values (?, ?, ?, ?, ?, ?, ?, null, null)
     `
-  
+
     let resp = await con.query(comando, [artista.nome, artista.descBibliografia, artista.linkInstagram, artista.linkTiktok, artista.linkTwitter, artista.linkYoutube, artista.linkSpotify])
     let info = resp[0];
-  
+
     artista.id = info.insertId;
     return artista;
 }
@@ -18,7 +18,7 @@ export async function inserirImagens(id, caminhoCapa, caminhoSelfie) {
         update tb_artista set imgCapa = ?, imgSelfie = ? 
                     where id = ?
     `
-  
+
     let resp = await con.query(comando, [caminhoCapa, caminhoSelfie, id])
 
     return resp;
@@ -29,10 +29,10 @@ export async function listarArtistas() {
       select *
         from tb_artista
     `
-  
+
     let resp = await con.query(comando, []);
     let linhas = resp[0];
-  
+
     return linhas;
 }
 
@@ -41,10 +41,10 @@ export async function buscarArtistaPorNome(nome) {
       select * from tb_artista
        where nome like ?
     `
-  
+
     let resp = await con.query(comando, [nome]);
     let linhas = resp[0];
-  
+
     return linhas;
 }
 
@@ -53,7 +53,7 @@ export async function buscarArtistaPorId(id) {
       select * from tb_artista
        where id = ?
     `
-  
+
     let resp = await con.query(comando, [id]);
     let linhas = resp;
     if (linhas.length > 0) {
@@ -67,10 +67,40 @@ export async function removerArtista(id) {
     let comando = `
       delete from tb_artista where id = ?
     `
-  
+
     let resp = await con.query(comando, [id]);
     let info = resp[0];
-  
+
     return info.affectedRows;
 }
-  
+
+export async function atualizarArtista(artista) {
+    let comando = `
+        UPDATE tb_artista
+        SET nome = ?, 
+            descBibliografia = ?, 
+            linkInstagram = ?, 
+            linkTiktok = ?, 
+            linkTwitter = ?, 
+            linkYoutube = ?, 
+            linkSpotify = ?, 
+            imgCapa = ?, 
+            imgSelfie = ?
+        WHERE id = ?
+    `;
+
+    let resp = await con.query(comando, [
+        artista.nome,
+        artista.descBibliografia,
+        artista.linkInstagram,
+        artista.linkTiktok,
+        artista.linkTwitter,
+        artista.linkYoutube,
+        artista.linkSpotify,
+        artista.imgCapa,
+        artista.imgSelfie,
+        artista.id
+    ]);
+
+    return resp[0].affectedRows > 0;
+}
