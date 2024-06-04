@@ -37,6 +37,7 @@ export async function listarArtistas() {
              imgCapa            capa,
              imgSelfie          selfie
         from tb_artista
+        order by nm_artista
     `;
 
     let resp = await con.query(comando, []);
