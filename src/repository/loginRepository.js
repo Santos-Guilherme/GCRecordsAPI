@@ -9,7 +9,6 @@ export async function salvarLogin(login) {
     let resp = await con.query(comando, [login.nome, login.senha])
     let info = resp[0];
 
-
     login.id = inso.inserId;
     return login;
 }
@@ -27,11 +26,9 @@ export async function listarLogins() {
 
 export async function buscarUsuario(login) {
     let comando = `
-        select * from tb_login where nomeUsuario = ? and senha = ?
+        SELECT * FROM tb_login WHERE nomeUsuario = ? AND senha = ?;
     `;
 
-    let resp = await con.query(comando, [login.nome, login.senha]);
-    let linha = resp[0];
-
-    return linha;
+    let [linhas] = await con.query(comando, [login.nome, login.senha]);
+    return linhas[0];
 }
