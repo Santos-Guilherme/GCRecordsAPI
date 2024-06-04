@@ -2,11 +2,11 @@ import con from "./connection.js";
 
 export async function salvarArtista(artista) {
     let comando = `
-      insert into tb_artista (nome, descBibliografia, linkInstagram, linkTiktok, linkTwitter, linkYoutube, linkSpotify, imgCapa, imgSelfie) 
-                    values (?, ?, ?, ?, ?, ?, ?, null, null)
-    `
+      insert into tb_artista (nm_artista, descBiografia, linkInstagram, linkTiktok, linkTwitter, linkYoutube, linkSpotify, imgCapa, imgSelfie) 
+                    values (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-    let resp = await con.query(comando, [artista.nome, artista.descBibliografia, artista.linkInstagram, artista.linkTiktok, artista.linkTwitter, artista.linkYoutube, artista.linkSpotify])
+    let resp = await con.query(comando, [artista.nome, artista.biografia, artista.instagram, artista.tiktok, artista.twitter, artista.youtube, artista.spotify, "", ""])
     let info = resp[0];
 
     artista.id = info.insertId;
@@ -16,8 +16,8 @@ export async function salvarArtista(artista) {
 export async function inserirImagens(id, caminhoCapa, caminhoSelfie) {
     let comando = `
         update tb_artista set imgCapa = ?, imgSelfie = ? 
-                    where id = ?
-    `
+                    where id_artista = ?
+    `;
 
     let resp = await con.query(comando, [caminhoCapa, caminhoSelfie, id])
 
@@ -26,9 +26,18 @@ export async function inserirImagens(id, caminhoCapa, caminhoSelfie) {
 
 export async function listarArtistas() {
     let comando = `
-      select *
+      select id_artista         id, 
+             nm_artista         nome, 
+             descBiografia      biografia, 
+             linkInstagram      instagram,
+             linkTiktok         tiktok,
+             linkTwitter        twitter,
+             linkYoutube        youtube,
+             linkSpotify        spotify,
+             imgCapa            capa,
+             imgSelfie          selfie
         from tb_artista
-    `
+    `;
 
     let resp = await con.query(comando, []);
     let linhas = resp[0];
@@ -36,26 +45,59 @@ export async function listarArtistas() {
     return linhas;
 }
 
-export async function buscarArtistaPorNome(nome) {
+export async function filtrarArtistaPorNome(nome) {
     let comando = `
-      select * from tb_artista
-       where nome like ?
-    `
+      select id_artista         id, 
+            nm_artista          nome, 
+            descBiografia       biografia, 
+            linkInstagram       instagram,
+            linkTiktok          tiktok,
+            linkTwitter         twitter,
+            linkYoutube         youtube,
+            linkSpotify         spotify,
+            imgCapa             capa,
+            imgSelfie           selfie
+        from tb_artista
+       where nm_artista like ?
+    `;
 
-    let resp = await con.query(comando, [nome]);
+    let resp = await con.query(comando, [`%${nome}%`]);
     let linhas = resp[0];
 
     return linhas;
 }
 
+export async function buscarArtistaPorNome(nome) {
+    let comando = `
+      select id_artista         id, 
+            nm_artista          nome
+        from tb_artista
+       where nm_artista = ?
+    `;
+
+    let [linhas] = await con.query(comando, [nome]);
+
+    return linhas.length > 0 ? linhas[0] : null;
+}
+
 export async function buscarArtistaPorId(id) {
     let comando = `
-      select * from tb_artista
-       where id = ?
-    `
+      select id_artista as      id, 
+            nm_artista as             nome, 
+            descBiografia       biografia, 
+            linkInstagram       instagram,
+            linkTiktok          tiktok,
+            linkTwitter         twitter,
+            linkYoutube         youtube,
+            linkSpotify         spotify,
+            imgCapa             capa,
+            imgSelfie           selfie
+        from tb_artista
+       where id_artista = ?
+    `;
 
     let resp = await con.query(comando, [id]);
-    let linhas = resp;
+    let linhas = resp[0];
     if (linhas.length > 0) {
         return linhas[0];
     } else {
@@ -65,8 +107,8 @@ export async function buscarArtistaPorId(id) {
 
 export async function removerArtista(id) {
     let comando = `
-      delete from tb_artista where id = ?
-    `
+      delete from tb_artista where id_artista = ?
+    `;
 
     let resp = await con.query(comando, [id]);
     let info = resp[0];
@@ -74,32 +116,28 @@ export async function removerArtista(id) {
     return info.affectedRows;
 }
 
-export async function atualizarArtista(artista) {
+export async function atualizarArtista(id, artista) {
     let comando = `
         UPDATE tb_artista
-        SET nome = ?, 
-            descBibliografia = ?, 
+        SET nm_artista = ?, 
+            descBiografia = ?, 
             linkInstagram = ?, 
             linkTiktok = ?, 
             linkTwitter = ?, 
             linkYoutube = ?, 
-            linkSpotify = ?, 
-            imgCapa = ?, 
-            imgSelfie = ?
-        WHERE id = ?
+            linkSpotify = ?
+        WHERE id_artista = ?
     `;
 
     let resp = await con.query(comando, [
         artista.nome,
-        artista.descBibliografia,
-        artista.linkInstagram,
-        artista.linkTiktok,
-        artista.linkTwitter,
-        artista.linkYoutube,
-        artista.linkSpotify,
-        artista.imgCapa,
-        artista.imgSelfie,
-        artista.id
+        artista.biografia,
+        artista.instagram,
+        artista.tiktok,
+        artista.twitter,
+        artista.youtube,
+        artista.spotify,
+        id
     ]);
 
     return resp[0].affectedRows > 0;

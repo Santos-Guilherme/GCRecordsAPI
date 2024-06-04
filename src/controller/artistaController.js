@@ -1,6 +1,6 @@
 import multer from "multer";
 
-import { removerArtista, buscarArtistaPorId, buscarArtistaPorNome, inserirImagens, listarArtistas, salvarArtista } from "../repository/artistaRepository.js";
+import { removerArtista, buscarArtistaPorId, filtrarArtistaPorNome, inserirImagens, listarArtistas, salvarArtista, buscarArtistaPorNome, atualizarArtista } from "../repository/artistaRepository.js";
 import { Router } from "express";
 
 let servidor = Router();
@@ -30,30 +30,36 @@ servidor.put('/artista/imagens/:id', upload.fields([
     resp.status(202).send();
 })
 
+servidor.get('/artista/filtro/:nome', async (req, resp) => {
+    let nome = req.params.nome;
+    let artista = '%'+nome+"%";
+  
+    let lista = await filtrarArtistaPorNome(artista);
+    resp.send(lista);
+})
+
 servidor.get("/artista", async(req, resp) => {
     let listaArtistas = await listarArtistas();
     resp.send(listaArtistas);
 })
 
-servidor.get('/artista/nome', async (req, resp) => {
-    let artista = req.body;
-    let nome = '%'+artista.nome+"%";
-  
-    let lista = await buscarArtistaPorNome(nome);
-    resp.send(lista);
-})
 
 servidor.get('/artista/:id', async (req, resp) => {
-    let id = req.params.id;
+    let idArtista = req.params.id;
   
-    let artista = await buscarArtistaPorId(id);
+    let artista = await buscarArtistaPorId(idArtista);
     
-    if (artista) {
-        resp.send(artista);
-    } else {
-        resp.status(404).send("Artista não encontrado");
-    }
+    resp.send(artista);
 })
+
+servidor.get('/artista/nome/:nome', async (req, res) => {
+    const nome = req.params.nome;
+    const artista = await buscarArtistaPorNome(nome);
+    if (!artista) {
+        return res.status(404).send({ error: 'Artista não encontrado' });
+    }
+    res.send(artista);
+});
 
 servidor.delete('/artista/:id', async (req, resp) => {
     let id = req.params.id;

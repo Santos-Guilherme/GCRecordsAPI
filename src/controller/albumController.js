@@ -1,7 +1,7 @@
 import multer from "multer";
 
 import { Router } from "express";
-import { buscarAlbumPorArtista, buscarAlbumPorId, buscarUltimosAlbuns, buscarUltimosDoisAlbunsPorArtista, inserirImagens, listarAlbums, removerAlbum, salvarAlbum } from "../repository/albumRepository.js";
+import { atualizarAlbum, buscarAlbumPorNome, buscarAlbumPorArtista, buscarAlbumPorId, buscarUltimosAlbuns, buscarUltimosDoisAlbunsPorArtista, inserirImagens, listarAlbums, removerAlbum, salvarAlbum } from "../repository/albumRepository.js";
 
 let servidor = Router();
 
@@ -38,6 +38,13 @@ servidor.get('/album/artista/:id', async (req, resp) => {
     resp.send(lista);
 })
 
+servidor.get('/album/filtro/nome/:nome', async (req, resp) => {
+    let nome = req.params.nome;
+
+    let lista = await buscarAlbumPorNome(nome);
+    resp.send(lista);
+});
+
 servidor.get('/album/lancamentos/:id', async (req, resp) => {
     let idArtista = req.params.id;
   
@@ -67,5 +74,16 @@ servidor.delete('/album/:id', async (req, resp) => {
     else
       resp.status(202).send();
 })
+
+servidor.put('/album/:id', async (req, resp) => {
+    let id = req.params.id;
+    let album = req.body;
+  
+    let resultado = await atualizarAlbum(id, album);
+    if (resultado.affectedRows == 0)
+        resp.status(404).send();
+    else
+        resp.status(202).send();
+});
 
 export default servidor;

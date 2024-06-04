@@ -4,7 +4,7 @@ export async function salvarLogin(login) {
     let comando = `
     insert into tb_login (nomeUsuario, senha)
     values (?, ?);
-    `
+    `;
 
     let resp = await con.query(comando, [login.nome, login.senha])
     let info = resp[0];
@@ -17,7 +17,7 @@ export async function salvarLogin(login) {
 export async function listarLogins() {
     let comando = `
         select * from tb_login
-    `
+    `;
 
     let resp = await con.query(comando, []);
     let linhas = resp[0];
@@ -28,7 +28,7 @@ export async function listarLogins() {
 export async function buscarUsuario(login) {
     let comando = `
         select * from tb_login where nomeUsuario = ? and senha = ?
-    `
+    `;
 
     let resp = await con.query(comando, [login.nome, login.senha]);
     let linha = resp[0];
