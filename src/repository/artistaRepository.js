@@ -143,3 +143,27 @@ export async function atualizarArtista(id, artista) {
 
     return resp[0].affectedRows > 0;
 }
+
+export async function atualizarImagemCapa(id, caminhoCapa) {
+    let comando = `
+        UPDATE tb_artista
+        SET imgCapa = ?
+        WHERE id_artista = ?
+    `;
+
+    let resp = await con.query(comando, [caminhoCapa, id]);
+
+    return resp[0].affectedRows > 0;
+}
+
+export async function atualizarImagemSelfie(id, caminhoSelfie) {
+    let comando = `
+        UPDATE tb_artista
+        SET imgSelfie = ?
+        WHERE id_artista = ?
+    `;
+
+    let resp = await con.query(comando, [caminhoSelfie, id]);
+
+    return resp[0].affectedRows > 0;
+}

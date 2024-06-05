@@ -13,19 +13,18 @@ import {
     verificarShowExistente,
     atualizarShow
 } from "../repository/showRepository.js";
+import { autenticarToken } from "../repository/autenticarToken.js";
 
 let servidor = Router();
 
-servidor.post('/show', async (req, resp) => {
+servidor.post('/show', autenticarToken, async (req, resp) => {
     let show = req.body;
-
     let showInserido = await salvarShow(show);
     resp.send(showInserido);
 });
 
-servidor.put('/show', async (req, resp) => {
+servidor.put('/show', autenticarToken, async (req, resp) => {
     let show = req.body;
-
     let showAtualizado = await atualizarShow(show);
     resp.send(showAtualizado);
 });
@@ -42,21 +41,18 @@ servidor.get("/show/principais", async(req, resp) => {
 
 servidor.get("/show/artista/:id", async(req, resp) => {
     let id = req.params.id;
-
     let listaShows = await buscarShowsPorArtista(id);
     resp.send(listaShows);
 });
 
 servidor.get('/show/:id', async (req, resp) => {
     let show = req.params.id;
-  
     let lista = await buscarShowPorId(show);
     resp.send(lista);
 });
 
-servidor.delete('/show/:id', async (req, resp) => {
+servidor.delete('/show/:id', autenticarToken, async (req, resp) => {
     let id = req.params.id;
-  
     let linhasAfetadas = await cancelarShow(id);
     if (linhasAfetadas == 0)
         resp.status(404).send();
@@ -90,7 +86,7 @@ servidor.get("/show/artista/:id/principais/data/:dataInicio/:dataFim", async (re
 
 servidor.get('/show/verificar/:id/data/:dataHora', async (req, resp) => {
     try {
-        let { id, dataHora} = req.params;
+        let { id, dataHora } = req.params;
         const existe = await verificarShowExistente(id, dataHora);
         resp.send({ existe });
     } catch (error) {
