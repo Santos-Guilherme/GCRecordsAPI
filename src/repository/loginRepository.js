@@ -9,7 +9,7 @@ export async function salvarLogin(login) {
     let resp = await con.query(comando, [login.nome, login.senha])
     let info = resp[0];
 
-    login.id = inso.inserId;
+    login.id = info.inserId;
     return login;
 }
 
